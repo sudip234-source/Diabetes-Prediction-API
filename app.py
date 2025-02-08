@@ -23,5 +23,5 @@ if st.button("Predict"):
         "DiabetesPedigreeFunction": dpf,
         "Age": age
     }
-    response = requests.post("http://127.0.0.1:8000/diabetes_prediction", json=input_data)
+    response = requests.post(api_url = "https://your-fastapi-app.onrender.com/diabetes_prediction", json=input_data)
     st.write("Prediction:", response.text)
