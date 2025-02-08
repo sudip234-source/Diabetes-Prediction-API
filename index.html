@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+        <form id="predictionForm">
+            <label for="pregnancies">Pregnancies:</label>
+            <input type="number" id="pregnancies" name="pregnancies" required>
+
+            <label for="glucose">Glucose:</label>
+            <input type="number" id="glucose" name="glucose" required>
+
+            <label for="bloodPressure">Blood Pressure:</label>
+            <input type="number" id="bloodPressure" name="bloodPressure" required>
+
+            <label for="skinThickness">Skin Thickness:</label>
+            <input type="number" id="skinThickness" name="skinThickness" required>
+
+            <label for="insulin">Insulin:</label>
+            <input type="number" id="insulin" name="insulin" required>
+
+            <label for="bmi">BMI:</label>
+            <input type="number" step="0.1" id="bmi" name="bmi" required>
+
+            <label for="dpf">Diabetes Pedigree Function:</label>
+            <input type="number" step="0.001" id="dpf" name="dpf" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+    
+            // Collect form data
+            const formData = {
+                pregnancies: parseInt(document.getElementById('pregnancies').value),
+                Glucose: parseInt(document.getElementById('glucose').value),
+                BloodPressure: parseInt(document.getElementById('bloodPressure').value),
+                SkinThickness: parseInt(document.getElementById('skinThickness').value),
+                Insulin: parseInt(document.getElementById('insulin').value),
+                BMI: parseFloat(document.getElementById('bmi').value),
+                DiabetesPedigreeFunction: parseFloat(document.getElementById('dpf').value),
+                Age: parseInt(document.getElementById('age').value)
+            };
+    
+            try {
+                // Send a POST request to the API
+                const response = await fetch('/diabetes_prediction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+    
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                // Get the prediction result
+                const result = await response.text();
+    
+                // Display the result
+                document.getElementById('result').innerText = result;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>
